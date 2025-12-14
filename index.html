@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>JOWA - Zambia Job Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables - Zambia Colors */
+        :root {
+            --zambia-green: #2E8B57;
+            --zambia-dark-green: #1E6B47;
+            --zambia-orange: #FF8C00;
+            --zambia-red: #C8102E;
+            --zambia-black: #000000;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --background-light: #F8F9FA;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+        }
+
+        /* Mobile First Design */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Touch-friendly elements */
+        button, 
+        .btn,
+        input[type="submit"],
+        .tab-btn,
+        .keypad button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        input, select, textarea {
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+            
+            .container {
+                padding: 0 12px;
+            }
+            
+            section {
+                padding: 40px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 8px;
+            }
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Zambia Map Logo */
+        .zambia-logo {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            background: linear-gradient(135deg, 
+                var(--zambia-green) 0%, 
+                var(--zambia-green) 33%, 
+                var(--zambia-red) 33%, 
+                var(--zambia-red) 66%, 
+                var(--zambia-black) 66%, 
+                var(--zambia-black) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            flex-shrink: 0;
+        }
+
+        .zambia-logo:after {
+            content: 'ZM';
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .zambia-logo:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 25px;
+            background: var(--zambia-orange);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Typography */
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--zambia-dark-green);
+            position: relative;
+            line-height: 1.2;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--zambia-orange);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            padding: 0 10px;
+        }
+
+        /* Buttons - Mobile Optimized */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            text-align: center;
+            min-height: 48px;
+            min-width: 48px;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--zambia-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            background-color: var(--zambia-dark-green);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--zambia-green);
+            border: 2px solid var(--zambia-green);
+        }
+
+        .btn-secondary:hover, .btn-secondary:active {
+            background-color: var(--zambia-green);
+            color: var(--white);
+        }
+
+        .btn-orange {
+            background-color: var(--zambia-orange);
+            color: var(--white);
+        }
+
+        .btn-orange:hover, .btn-orange:active {
+            background-color: #E67E00;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation - Mobile Optimized */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 12px 0;
+            height: 70px;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+            flex-shrink: 0;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--zambia-green);
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            display: block;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--zambia-green);
+        }
+
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--zambia-green);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--zambia-green);
+            background: none;
+            border: none;
+            padding: 8px;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: -280px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background-color: var(--white);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 16px 24px;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .mobile-menu a:hover,
+        .mobile-menu a.active {
+            background-color: var(--background-light);
+            color: var(--zambia-green);
+            padding-left: 30px;
+        }
+
+        .mobile-menu a.btn-orange {
+            margin: 20px 24px;
+            border-radius: 30px;
+            text-align: center;
+            border: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        /* Hero Section - Mobile Optimized */
+        .hero {
+            background: linear-gradient(135deg, var(--zambia-dark-green) 0%, var(--zambia-green) 100%);
+            color: var(--white);
+            padding: 40px 0 60px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            padding: 0 10px;
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 15px;
+        }
+
+        .ussd-code {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ussd-code:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            .hero-stats {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+            }
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Tabs Navigation - Mobile Optimized */
+        .tabs {
+            background-color: var(--white);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 70px;
+            z-index: 998;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .tab-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            background: none;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 44px;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--background-light);
+        }
+
+        .tab-btn.active {
+            background-color: var(--zambia-green);
+            color: white;
+            border-color: var(--zambia-green);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Jobs Grid - Mobile Optimized */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        @media (min-width: 768px) {
+            .jobs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .jobs-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .job-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--zambia-green);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            color: var(--zambia-dark-green);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .job-company {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .job-type {
+            background-color: var(--zambia-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .job-details {
+            margin: 15px 0;
+        }
+
+        .job-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .job-detail i {
+            margin-right: 8px;
+            color: var(--zambia-green);
+            width: 20px;
+            flex-shrink: 0;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .job-salary {
+            font-weight: 600;
+            color: var(--zambia-dark-green);
+            font-size: 1.1rem;
+        }
+
+        /* CEO Section - New */
+        .ceo-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ceo-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://geetech.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero-image.8f4ae3a8.png&w=1920&q=75');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+
+        .ceo-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .ceo-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (min-width: 992px) {
+            .ceo-content {
+                justify-content: space-between;
+            }
+        }
+
+        .ceo-image-container {
+            flex: 0 0 250px;
+        }
+
+        .ceo-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--zambia-orange);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .ceo-image:hover {
+            transform: scale(1.05);
+        }
+
+        .ceo-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .ceo-name {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .ceo-title {
+            font-size: 1.2rem;
+            color: var(--zambia-orange);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .ceo-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .ceo-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+        }
+
+        .ceo-contact-item i {
+            color: var(--zambia-orange);
+            font-size: 1.3rem;
+            width: 30px;
+        }
+
+        .ceo-contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .ceo-contact-item a:hover {
+            color: var(--zambia-orange);
+            text-decoration: underline;
+        }
+
+        .ceo-message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--zambia-orange);
+        }
+
+        /* Mobile adjustments for CEO section */
+        @media (max-width: 768px) {
+            .ceo-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            
+            .ceo-image-container {
+                flex: 0 0 200px;
+            }
+            
+            .ceo-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .ceo-name {
+                font-size: 2rem;
+            }
+            
+            .ceo-contact {
+                align-items: center;
+            }
+            
+            .ceo-contact-item {
+                justify-content: center;
+            }
+        }
+
+        /* Filters */
+        .filters {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--zambia-dark-green);
+            font-size: 0.9rem;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--zambia-green);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        /* Forms - Mobile Optimized */
+        .form-container {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--zambia-dark-green);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--zambia-green);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* USSD Simulator - Mobile Optimized */
+        .simulator-container {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 30px 0;
+        }
+
+        .simulator {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .simulator-screen {
+            flex: 1;
+            min-width: 100%;
+            background-color: #1a1a1a;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            color: #4CAF50;
+            height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #333;
+        }
+
+        @media (min-width: 768px) {
+            .simulator-screen {
+                min-width: 300px;
+            }
+        }
+
+        .simulator-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 0.9rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .simulator-content {
+            flex: 1;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .ussd-message {
+            margin-bottom: 8px;
+            animation: fadeInUp 0.3s ease;
+            word-break: break-word;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+
+        .input-prompt {
+            color: #fff;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        #currentInput {
+            color: #fff;
+            letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
+            min-height: 20px;
+        }
+
+        .input-cursor {
+            animation: blink 1s infinite;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .simulator-keypad {
+            flex: 1;
+            min-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .simulator-keypad {
+                min-width: 300px;
+            }
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .keypad button {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 50%;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .keypad button:active {
+            transform: scale(0.95);
+            background-color: var(--zambia-green);
+        }
+
+        .keypad button span {
+            font-size: 1.6rem;
+        }
+
+        .keypad button small {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .keypad-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .keypad-controls .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* Footer - Mobile Optimized */
+        .footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--zambia-orange);
+        }
+
+        .footer-section a {
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--zambia-orange);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .social-links a:hover {
+            background-color: var(--zambia-orange);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .developer-credit {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .developer-credit a {
+            color: var(--zambia-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .developer-credit a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Database Connection Status */
+        .db-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--zambia-green);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            animation: slideInRight 0.3s ease;
+        }
+
+        .db-status.offline {
+            background: var(--zambia-red);
+        }
+
+        .db-status .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .db-status.offline .status-dot {
+            background: #ff4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-container {
+                padding: 20px 15px;
+            }
+            
+            .db-status {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* Prevent horizontal scroll on mobile */
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Loading states */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Database Connection Status -->
+    <div id="dbStatus" class="db-status">
+        <span class="status-dot"></span>
+        <span>Connecting to database...</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo" onclick="showTab('home'); return false;">
+                <div class="zambia-logo"></div>
+                <div>
+                    <h1>JOWA</h1>
+                    <span class="logo-subtitle">Zambia Job Platform</span>
+                </div>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#" onclick="showTab('home'); return false;" class="active">Home</a>
+                <a href="#" onclick="showTab('jobs'); return false;">Jobs</a>
+                <a href="#" onclick="showTab('employers'); return false;">Employers</a>
+                <a href="#" onclick="showTab('payments'); return false;">Payments</a>
+                <a href="#" onclick="showTab('dashboard'); return false;">Dashboard</a>
+                <a href="#" onclick="showTab('admin'); return false;">Admin</a>
+                <a href="#" onclick="showTab('ceo'); return false;">CEO</a>
+                <a href="#" onclick="showTab('simulator'); return false;" class="btn btn-orange">Simulator</a>
+            </div>
+            
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#" onclick="showTab('home'); toggleMobileMenu(); return false;">Home</a>
+        <a href="#" onclick="showTab('jobs'); toggleMobileMenu(); return false;">Jobs</a>
+        <a href="#" onclick="showTab('employers'); toggleMobileMenu(); return false;">Employers</a>
+        <a href="#" onclick="showTab('payments'); toggleMobileMenu(); return false;">Payments</a>
+        <a href="#" onclick="showTab('dashboard'); toggleMobileMenu(); return false;">Dashboard</a>
+        <a href="#" onclick="showTab('admin'); toggleMobileMenu(); return false;">Admin</a>
+        <a href="#" onclick="showTab('ceo'); toggleMobileMenu(); return false;">CEO</a>
+        <a href="#" onclick="showTab('simulator'); toggleMobileMenu(); return false;">USSD Simulator</a>
+        <a href="#" onclick="showLoginModal(); toggleMobileMenu(); return false;" class="btn btn-orange">Login</a>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+        <div class="container">
+            <div class="tab-nav" id="tabNav">
+                <button class="tab-btn active" onclick="showTab('home')">Home</button>
+                <button class="tab-btn" onclick="showTab('jobs')">Browse Jobs</button>
+                <button class="tab-btn" onclick="showTab('employers')">For Employers</button>
+                <button class="tab-btn" onclick="showTab('payments')">Payments</button>
+                <button class="tab-btn" onclick="showTab('dashboard')">Dashboard</button>
+                <button class="tab-btn" onclick="showTab('admin')">Admin Panel</button>
+                <button class="tab-btn" onclick="showTab('ceo')">CEO</button>
+                <button class="tab-btn" onclick="showTab('simulator')">USSD Simulator</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Tab -->
+        <section id="home-tab" class="tab-content active">
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">Find Work in Zambia, No Internet Needed!</h1>
+                    <p class="hero-subtitle">
+                        Connect with employers across all 10 provinces using simple USSD technology.
+                        Dial <span class="ussd-code" onclick="copyToClipboard('*384*531#')">*384*531#</span> to get started!
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showTab('how-it-works')">
+                            <i class="fas fa-play-circle"></i> How It Works
+                        </button>
+                        <button class="btn btn-secondary" onclick="showTab('jobs')">
+                            <i class="fas fa-briefcase"></i> Browse Jobs
+                        </button>
+                        <button class="btn btn-orange" onclick="showTab('simulator')">
+                            <i class="fas fa-mobile-alt"></i> Try Simulator
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <h3 id="totalJobs">2,500+</h3>
+                            <p>Jobs Posted</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalUsers">15,000+</h3>
+                            <p>Users Connected</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="successRate">85%</h3>
+                            <p>Success Rate</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalEarnings">K 1.2M+</h3>
+                            <p>Total Earnings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <!-- Quick Stats -->
+                <div style="margin-top: 40px;">
+                    <h2 class="section-title">Live Statistics</h2>
+                    <div class="jobs-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                        <div class="job-card" style="text-align: center;">
+                            <div class="dashboard-icon" style="margin: 0 auto 15px; width: 60px; height: 60px; background: var(--zambia-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3>Active Jobs</h3>
+                            <p class="stat-number" style="font-size: 2rem; color: var(--zambia-green); margin: 10px 0;">347</p>
+                            <p class="stat-desc" style="color: var(--text-light);">Available now</p>
+                        </div>
+                        <div class="job-card" style="text-align: center;">
+                            <div class="dashboard-icon" style="margin: 0 auto 15px; width: 60px; height: 60px; background: var(--zambia-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Active Users</h3>
+                            <p class="stat-number" style="font-size: 2rem; color: var(--zambia-orange); margin: 10px 0;">2,143</p>
+                            <p class="stat-desc" style="color: var(--text-light);">Online today</p>
+                        </div>
+                        <div class="job-card" style="text-align: center;">
+                            <div class="dashboard-icon" style="margin: 0 auto 15px; width: 60px; height: 60px; background: var(--zambia-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <h3>Today's Payments</h3>
+                            <p class="stat-number" style="font-size: 2rem; color: var(--zambia-red); margin: 10px 0;">K 45,230</p>
+                            <p class="stat-desc" style="color: var(--text-light);">Processed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Jobs Preview -->
+                <div style="margin-top: 60px;">
+                    <h2 class="section-title">Latest Job Opportunities</h2>
+                    <p class="section-subtitle">Find work that matches your skills</p>
+                    <div class="jobs-grid" id="homeJobs">
+                        <!-- Jobs will be loaded here -->
+                    </div>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="showTab('jobs')">
+                            <i class="fas fa-eye"></i> View All Jobs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CEO Tab -->
+        <section id="ceo-tab" class="tab-content ceo-section">
+            <div class="ceo-container">
+                <h2 class="section-title" style="color: white;">Meet Our CEO</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">Visionary Leader & Founder</p>
+                
+                <div class="ceo-content">
+                    <div class="ceo-image-container">
+                        <img src="https://res.cloudinary.com/dmi9cbt3x/image/upload/v1764846298/470150065_451031534709247_3953911525087743589_n_k3pvm2.jpg" 
+                             alt="Cassidy Madando Sakala" 
+                             class="ceo-image"
+                             onerror="this.src='https://ui-avatars.com/api/?name=Cassidy+Sakala&background=2E8B57&color=fff&size=250'">
+                    </div>
+                    
+                    <div class="ceo-info">
+                        <h1 class="ceo-name">Cassidy Madando Sakala</h1>
+                        <div class="ceo-title">CEO & Founder - JOWA Zambia</div>
+                        
+                        <div class="ceo-contact">
+                            <div class="ceo-contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:geetech1600@gmail.com">geetech1600@gmail.com</a>
+                            </div>
+                            <div class="ceo-contact-item">
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:+260570528201">+260 570 528 201</a>
+                            </div>
+                            <div class="ceo-contact-item">
+                                <i class="fas fa-globe"></i>
+                                <a href="https://geetech.vercel.app" target="_blank">geetech.vercel.app</a>
+                            </div>
+                            <div class="ceo-contact-item">
+                                <i class="fas fa-building"></i>
+                                <span>GeeTech Enterprises</span>
+                            </div>
+                        </div>
+                        
+                        <div class="ceo-message">
+                            <p>"At JOWA, we're revolutionizing how Zambia works. Our mission is to connect every job seeker with meaningful employment opportunities, regardless of their access to internet or smartphones."</p>
+                            <p style="margin-top: 15px;">"Through innovative USSD technology, we're bridging the digital divide and creating economic opportunities across all 10 provinces of Zambia."</p>
+                        </div>
+                        
+                        <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
+                            <a href="https://geetech.vercel.app" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Visit GeeTech
+                            </a>
+                            <a href="mailto:geetech1600@gmail.com" class="btn btn-orange">
+                                <i class="fas fa-paper-plane"></i> Send Email
+                            </a>
+                            <a href="tel:+260570528201" class="btn btn-secondary">
+                                <i class="fas fa-phone"></i> Call Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jobs Tab -->
+        <section id="jobs-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">Browse Jobs in Zambia</h1>
+                <p class="section-subtitle">Find work opportunities across all provinces</p>
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="searchJobs"><i class="fas fa-search"></i> Search Jobs</label>
+                            <input type="text" id="searchJobs" placeholder="Job title, skills, or company..." onkeyup="filterJobs()">
+                        </div>
+                        <div class="filter-group">
+                            <label for="jobCategory"><i class="fas fa-tag"></i> Category</label>
+                            <select id="jobCategory" onchange="filterJobs()">
+                                <option value="">All Categories</option>
+                                <option value="construction">Construction</option>
+                                <option value="farming">Farming & Agriculture</option>
+                                <option value="cleaning">Cleaning & Domestic</option>
+                                <option value="retail">Retail & Sales</option>
+                                <option value="driving">Driving & Delivery</option>
+                                <option value="security">Security</option>
+                                <option value="hospitality">Hospitality</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="jobLocation"><i class="fas fa-map-marker-alt"></i> Location</label>
+                            <select id="jobLocation" onchange="filterJobs()">
+                                <option value="">All Locations</option>
+                                <option value="lusaka">Lusaka</option>
+                                <option value="ndola">Ndola</option>
+                                <option value="kitwe">Kitwe</option>
+                                <option value="livingstone">Livingstone</option>
+                                <option value="kabwe">Kabwe</option>
+                                <option value="chipata">Chipata</option>
+                                <option value="solwezi">Solwezi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jobs Grid -->
+                <div class="jobs-grid" id="jobsGrid">
+                    <!-- Jobs will be loaded here -->
+                </div>
+
+                <!-- Pagination -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="loadMoreJobs()">
+                        <i class="fas fa-plus"></i> Load More Jobs
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Employers Tab -->
+        <section id="employers-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">For Employers</h1>
+                <p class="section-subtitle">Find reliable workers for your business</p>
+
+                <div class="form-container">
+                    <h2 style="text-align: center; margin-bottom: 25px;">Post a New Job</h2>
+                    <form id="postJobForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title *</label>
+                                <input type="text" id="jobTitle" placeholder="e.g., Construction Worker" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobSalary">Salary (ZMW) *</label>
+                                <input type="number" id="jobSalary" placeholder="e.g., 120" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="jobType">Job Type *</label>
+                                <select id="jobType" required>
+                                    <option value="">Select type</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="project">Project-based</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobLocationForm">Location *</label>
+                                <select id="jobLocationForm" required>
+                                    <option value="">Select location</option>
+                                    <option value="lusaka">Lusaka</option>
+                                    <option value="ndola">Ndola</option>
+                                    <option value="kitwe">Kitwe</option>
+                                    <option value="livingstone">Livingstone</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobCategoryForm">Category *</label>
+                            <select id="jobCategoryForm" required>
+                                <option value="">Select category</option>
+                                <option value="construction">Construction</option>
+                                <option value="farming">Farming & Agriculture</option>
+                                <option value="cleaning">Cleaning & Domestic</option>
+                                <option value="retail">Retail & Sales</option>
+                                <option value="driving">Driving & Delivery</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobDescription">Job Description *</label>
+                            <textarea id="jobDescription" rows="4" placeholder="Describe the job duties and requirements..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone *</label>
+                            <input type="tel" id="contactPhone" placeholder="+260 XXX XXX XXX" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Post Job (K10 via USSD)
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Employer Benefits -->
+                <div style="margin-top: 60px;">
+                    <h2 class="section-title">Why Employers Choose JOWA</h2>
+                    <div class="jobs-grid">
+                        <div class="job-card" style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--zambia-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 15px;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Large Worker Pool</h3>
+                            <p>Access thousands of verified workers across Zambia</p>
+                        </div>
+                        <div class="job-card" style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--zambia-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 15px;">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Quick Hiring</h3>
+                            <p>Find workers within hours, not days</p>
+                        </div>
+                        <div class="job-card" style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--zambia-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 15px;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Verified Workers</h3>
+                            <p>All workers are registered and verified</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payments Tab -->
+        <section id="payments-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">Payment Services</h1>
+                <p class="section-subtitle">Manage your payments and transactions</p>
+
+                <!-- Payment Methods -->
+                <div class="jobs-grid">
+                    <div class="job-card">
+                        <div style="display: inline-block; padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px;">MTN Mobile Money</div>
+                        <h3>Mobile Payments</h3>
+                        <p>Pay with MTN, Airtel, or Zamtel mobile money</p>
+                        <p style="margin-top: 15px;"><strong>Fee:</strong> 2% transaction fee</p>
+                        <button class="btn btn-primary" onclick="initiatePayment('mobile')" style="margin-top: 20px; width: 100%;">
+                            <i class="fas fa-money-bill-wave"></i> Make Payment
+                        </button>
+                    </div>
+
+                    <div class="job-card">
+                        <div style="display: inline-block; padding: 4px 12px; background: #fff3cd; color: #856404; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px;">Premium Job Posting</div>
+                        <h3>Post Jobs</h3>
+                        <p>Premium job posting for better visibility</p>
+                        <p style="margin-top: 15px;"><strong>Cost:</strong> K10 per job post</p>
+                        <button class="btn btn-primary" onclick="initiatePayment('premium')" style="margin-top: 20px; width: 100%;">
+                            <i class="fas fa-briefcase"></i> Post Premium Job
+                        </button>
+                    </div>
+
+                    <div class="job-card">
+                        <div style="display: inline-block; padding: 4px 12px; background: #d4edda; color: #155724; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px;">Withdrawal</div>
+                        <h3>Earnings Payout</h3>
+                        <p>Withdraw your earnings to mobile money</p>
+                        <p style="margin-top: 15px;"><strong>Min. Withdrawal:</strong> K50</p>
+                        <button class="btn btn-primary" onclick="initiatePayment('withdrawal')" style="margin-top: 20px; width: 100%;">
+                            <i class="fas fa-download"></i> Withdraw Funds
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Payment History -->
+                <div style="margin-top: 60px;">
+                    <h2 class="section-title">Recent Transactions</h2>
+                    <div class="form-container">
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: var(--zambia-green); color: white;">
+                                        <th style="padding: 12px; text-align: left;">Date</th>
+                                        <th style="padding: 12px; text-align: left;">Description</th>
+                                        <th style="padding: 12px; text-align: left;">Amount</th>
+                                        <th style="padding: 12px; text-align: left;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentHistory">
+                                    <!-- Payment history will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">Your Dashboard</h1>
+                <p class="section-subtitle">Welcome back, <span id="userName">User</span>!</p>
+
+                <!-- Quick Stats -->
+                <div class="jobs-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Jobs Applied</h3>
+                        <p class="stat-number" id="jobsApplied" style="font-size: 1.8rem; color: var(--zambia-green); margin: 5px 0;">12</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">This month</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Accepted</h3>
+                        <p class="stat-number" id="jobsAccepted" style="font-size: 1.8rem; color: var(--zambia-orange); margin: 5px 0;">3</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">Jobs</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Pending</h3>
+                        <p class="stat-number" id="jobsPending" style="font-size: 1.8rem; color: var(--zambia-red); margin: 5px 0;">5</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">Applications</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-dark-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3>Earnings</h3>
+                        <p class="stat-number" id="totalEarningsUser" style="font-size: 1.8rem; color: var(--zambia-dark-green); margin: 5px 0;">K 450</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">This month</p>
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="form-container" style="margin-top: 40px;">
+                    <h2 style="text-align: center; margin-bottom: 25px;">Your Profile</h2>
+                    <form id="profileForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profileName">Full Name *</label>
+                                <input type="text" id="profileName" value="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Phone Number *</label>
+                                <input type="tel" id="profilePhone" value="+260 97 123 4567" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profileSkills">Skills *</label>
+                            <input type="text" id="profileSkills" value="Construction, Carpentry, Painting" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profileLocation">Location *</label>
+                                <select id="profileLocation" required>
+                                    <option value="lusaka" selected>Lusaka</option>
+                                    <option value="ndola">Ndola</option>
+                                    <option value="kitwe">Kitwe</option>
+                                    <option value="livingstone">Livingstone</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileExperience">Experience</label>
+                                <select id="profileExperience">
+                                    <option value="0-1">0-1 years</option>
+                                    <option value="1-3" selected>1-3 years</option>
+                                    <option value="3-5">3-5 years</option>
+                                    <option value="5+">5+ years</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-save"></i> Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Tab -->
+        <section id="admin-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">Admin Dashboard</h1>
+                <p class="section-subtitle">System administration and monitoring</p>
+
+                <!-- Admin Controls -->
+                <div class="form-container" style="margin-bottom: 30px;">
+                    <h2 style="margin-bottom: 20px;">Quick Actions</h2>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="adminAction('refresh')">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                        <button class="btn btn-orange" onclick="adminAction('backup')">
+                            <i class="fas fa-database"></i> Backup Database
+                        </button>
+                        <button class="btn btn-secondary" onclick="adminAction('users')">
+                            <i class="fas fa-users"></i> Manage Users
+                        </button>
+                        <button class="btn btn-primary" onclick="adminAction('jobs')">
+                            <i class="fas fa-briefcase"></i> Manage Jobs
+                        </button>
+                        <button class="btn btn-orange" onclick="adminAction('payments')">
+                            <i class="fas fa-money-bill-wave"></i> View Payments
+                        </button>
+                        <button class="btn btn-secondary" onclick="adminAction('reports')">
+                            <i class="fas fa-chart-bar"></i> Generate Reports
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Stats -->
+                <div class="jobs-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Total Users</h3>
+                        <p class="stat-number" style="font-size: 1.8rem; color: var(--zambia-green); margin: 5px 0;">15,243</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">+235 today</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Active Jobs</h3>
+                        <p class="stat-number" style="font-size: 1.8rem; color: var(--zambia-orange); margin: 5px 0;">347</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">+12 today</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3>Revenue</h3>
+                        <p class="stat-number" style="font-size: 1.8rem; color: var(--zambia-red); margin: 5px 0;">K 45,230</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">Today</p>
+                    </div>
+                    
+                    <div class="job-card" style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: var(--zambia-dark-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 10px;">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Transactions</h3>
+                        <p class="stat-number" style="font-size: 1.8rem; color: var(--zambia-dark-green); margin: 5px 0;">1,234</p>
+                        <p class="stat-desc" style="color: var(--text-light); font-size: 0.9rem;">Today</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USSD Simulator Tab -->
+        <section id="simulator-tab" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">JOWA USSD Simulator</h1>
+                <p class="section-subtitle">Try the JOWA experience right here in your browser</p>
+
+                <div class="simulator-container">
+                    <div class="simulator">
+                        <div class="simulator-screen">
+                            <div class="simulator-header">
+                                <span class="simulator-title">JOWA ZAMBIA</span>
+                                <span class="simulator-time" id="simulatorTime">12:30</span>
+                            </div>
+                            <div class="simulator-content" id="simulatorDisplay">
+                                <!-- USSD messages will appear here -->
+                                <div class="ussd-message">Welcome to JOWA Zambia!</div>
+                                <div class="ussd-message">Connecting workers and employers across Zambia</div>
+                                <div class="ussd-message"> </div>
+                                <div class="ussd-message">1. Looking for Work</div>
+                                <div class="ussd-message">2. Post a Job</div>
+                                <div class="ussd-message">3. Payment Services</div>
+                                <div class="ussd-message">4. My Account</div>
+                                <div class="ussd-message">5. Help & Support</div>
+                                <div class="ussd-message"> </div>
+                                <div class="input-line">
+                                    <span class="input-prompt">&gt;</span>
+                                    <span id="currentInput"></span>
+                                    <span class="input-cursor">█</span>
+                                </div>
+                            </div>
+                            <div class="simulator-footer" style="color: #999; font-size: 0.8rem; margin-top: 10px; display: flex; justify-content: space-between;">
+                                <span>Send: #</span>
+                                <span>Back: *</span>
+                                <span>Cancel: 0#</span>
+                            </div>
+                        </div>
+
+                        <div class="simulator-keypad">
+                            <div class="keypad">
+                                <button data-key="1"><span>1</span><small></small></button>
+                                <button data-key="2"><span>2</span><small>ABC</small></button>
+                                <button data-key="3"><span>3</span><small>DEF</small></button>
+                                <button data-key="4"><span>4</span><small>GHI</small></button>
+                                <button data-key="5"><span>5</span><small>JKL</small></button>
+                                <button data-key="6"><span>6</span><small>MNO</small></button>
+                                <button data-key="7"><span>7</span><small>PQRS</small></button>
+                                <button data-key="8"><span>8</span><small>TUV</small></button>
+                                <button data-key="9"><span>9</span><small>WXYZ</small></button>
+                                <button data-key="*" class="special"><span>*</span></button>
+                                <button data-key="0"><span>0</span><small>+</small></button>
+                                <button data-key="#" class="special"><span>#</span></button>
+                            </div>
+                            <div class="keypad-controls">
+                                <button class="btn btn-secondary" onclick="clearSimulatorInput()">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                                <button class="btn btn-primary" onclick="sendSimulatorInput()">
+                                    <i class="fas fa-paper-plane"></i> Send (#)
+                                </button>
+                                <button class="btn btn-orange" onclick="resetSimulator()">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-container" style="margin-top: 30px;">
+                        <h3>Simulator Instructions</h3>
+                        <p>This simulator mimics the actual JOWA USSD experience. Try these:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>Click numbers to enter USSD code</li>
+                            <li>Press # to send/confirm</li>
+                            <li>Press * to go back/clear</li>
+                            <li>Try: <code>*384*531#</code> (Main Menu)</li>
+                            <li>Try: <code>1#</code> (Looking for Work)</li>
+                            <li>Try: <code>2#</code> (Post a Job)</li>
+                        </ul>
+                        <div style="background: var(--background-light); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <p><strong>Current Session:</strong> <span id="sessionStatus">Active</span></p>
+                            <p><strong>Phone:</strong> <span id="simPhone">+260 97 XXX XXXX</span></p>
+                            <p><strong>Menu Level:</strong> <span id="menuLevel">Main Menu</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <div class="zambia-logo"></div>
+                        <div>
+                            <h2 style="color: white; margin-bottom: 5px;">JOWA</h2>
+                            <span class="logo-subtitle" style="color: #ccc;">Zambia Job Platform</span>
+                        </div>
+                    </div>
+                    <p style="margin: 15px 0; color: #ccc; font-size: 0.95rem;">
+                        Connecting job seekers with employers across Zambia through USSD technology. Serving all 10 provinces.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://geetech.vercel.app" target="_blank" aria-label="GeeTech"><i class="fas fa-globe"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#" onclick="showTab('home'); return false;">Home</a>
+                    <a href="#" onclick="showTab('jobs'); return false;">Find Jobs</a>
+                    <a href="#" onclick="showTab('employers'); return false;">For Employers</a>
+                    <a href="#" onclick="showTab('payments'); return false;">Payments</a>
+                    <a href="#" onclick="showTab('dashboard'); return false;">Dashboard</a>
+                    <a href="#" onclick="showTab('ceo'); return false;">CEO</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">FAQs</a>
+                    <a href="#" onclick="showTab('simulator'); return false;">USSD Simulator</a>
+                    <a href="https://geetech.vercel.app" target="_blank">GeeTech</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p style="color: #ccc; margin-bottom: 10px;">
+                        <i class="fas fa-phone" style="color: var(--zambia-orange); margin-right: 8px;"></i>
+                        +260 570 528 201
+                    </p>
+                    <p style="color: #ccc; margin-bottom: 10px;">
+                        <i class="fas fa-envelope" style="color: var(--zambia-orange); margin-right: 8px;"></i>
+                        support@jowa.co.zm
+                    </p>
+                    <p style="color: #ccc; margin-bottom: 15px;">
+                        <i class="fas fa-map-marker-alt" style="color: var(--zambia-orange); margin-right: 8px;"></i>
+                        Lusaka, Zambia
+                    </p>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                        <p style="color: white; margin-bottom: 8px;"><strong>USSD Code:</strong></p>
+                        <div class="ussd-code" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 15px; border-radius: 6px; font-family: monospace; font-weight: bold; letter-spacing: 2px; display: inline-block; cursor: pointer;" onclick="copyToClipboard('*384*531#')">
+                            *384*531#
+                        </div>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-top: 8px;">Dial from any phone</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 JOWA Zambia. All rights reserved. | USSD Code: *384*531# | Serving Zambians Nationwide</p>
+                <div class="developer-credit">
+                    <p>Developed by <a href="https://geetech.vercel.app" target="_blank">GeeTech</a> | Cassidy Madando Sakala | <a href="mailto:geetech1600@gmail.com">geetech1600@gmail.com</a></p>
+                </div>
+                <p style="margin-top: 10px;">Proudly Zambian 🇿🇲</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Database Connection Script -->
+    <script>
+        // Database Configuration
+       const DB_CONFIG = {
+    apiUrl: 'http://localhost:5000', // Changed from '/api' to just base URL
+    endpoints: {
+        health: '/api/health',
+        jobs: '/api/jobs',
+        payments: '/api/payments',
+        stats: '/api/stats',
+        createJob: '/api/create_job'
+    }
+};
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize database connection
+            initDatabaseConnection();
+            
+            // Set current time in simulator
+            updateSimulatorTime();
+            setInterval(updateSimulatorTime, 60000);
+            
+            // Load initial data
+            loadData();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Show home tab by default
+            showTab('home');
+            
+            // Initialize mobile menu
+            initMobileMenu();
+        });
+
+        function initDatabaseConnection() {
+    const dbStatus = document.getElementById('dbStatus');
+    
+    // Test connection to health endpoint
+    fetch(DB_CONFIG.apiUrl + DB_CONFIG.endpoints.health)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Backend not reachable');
+        })
+        .then(data => {
+            if (data.database === 'connected') {
+                dbStatus.innerHTML = '<span class="status-dot"></span><span>Connected to Database</span>';
+                updateConnectionStatus(true);
+            } else {
+                throw new Error('Database disconnected');
+            }
+        })
+        .catch(error => {
+            console.log('Using mock data:', error.message);
+            dbStatus.innerHTML = '<span class="status-dot" style="background: #ff4444;"></span><span>Using Mock Data</span>';
+            dbStatus.classList.add('offline');
+            updateConnectionStatus(false);
+        });
+}
+        function updateConnectionStatus(connected) {
+            // Update UI based on connection status
+            const dbStatus = document.getElementById('dbStatus');
+            if (connected) {
+                dbStatus.classList.remove('offline');
+            } else {
+                dbStatus.classList.add('offline');
+            }
+        }
+
+        function loadData() {
+            // Try to load from backend first
+            fetch(DB_CONFIG.apiUrl + DB_CONFIG.endpoints.jobs)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Backend error');
+                })
+                .then(data => {
+                    console.log('Loaded data from backend:', data);
+                    renderJobs(data);
+                })
+                .catch(error => {
+                    console.log('Using mock data');
+                    loadMockData();
+                });
+        }
+
+        function loadMockData() {
+            // Mock jobs data
+            const mockJobs = [
+                {
+                    id: 1,
+                    title: "Construction Worker",
+                    company: "ZamBuild Construction",
+                    location: "Lusaka",
+                    salary: "K120/day",
+                    type: "Daily",
+                    category: "construction",
+                    description: "General construction work at building sites. Must have experience.",
+                    posted: "2 hours ago"
+                },
+                {
+                    id: 2,
+                    title: "Farm Assistant",
+                    company: "Green Valley Farms",
+                    location: "Ndola",
+                    salary: "K80/day",
+                    type: "Daily",
+                    category: "farming",
+                    description: "Assist with farming activities including planting and harvesting.",
+                    posted: "5 hours ago"
+                },
+                {
+                    id: 3,
+                    title: "Office Cleaner",
+                    company: "CleanPro Services",
+                    location: "Kitwe",
+                    salary: "K1,500/month",
+                    type: "Monthly",
+                    category: "cleaning",
+                    description: "Cleaning office premises on a daily basis.",
+                    posted: "1 day ago"
+                },
+                {
+                    id: 4,
+                    title: "Delivery Driver",
+                    company: "Quick Delivery Zambia",
+                    location: "Lusaka",
+                    salary: "K150/day + tips",
+                    type: "Daily",
+                    category: "driving",
+                    description: "Deliver packages to customers across Lusaka.",
+                    posted: "2 days ago"
+                },
+                {
+                    id: 5,
+                    title: "Security Guard",
+                    company: "Secure Zambia Ltd",
+                    location: "Livingstone",
+                    salary: "K1,800/month",
+                    type: "Monthly",
+                    category: "security",
+                    description: "Security services for commercial properties.",
+                    posted: "3 days ago"
+                }
+            ];
+
+            // Mock payments
+            const mockPayments = [
+                { date: "2024-01-15", description: "Premium Job Posting", amount: "K10", status: "completed" },
+                { date: "2024-01-14", description: "Job Application Fee", amount: "K5", status: "completed" },
+                { date: "2024-01-13", description: "Earnings Withdrawal", amount: "K500", status: "completed" },
+                { date: "2024-01-12", description: "Mobile Money Payment", amount: "K50", status: "pending" },
+                { date: "2024-01-11", description: "Service Fee", amount: "K20", status: "failed" }
+            ];
+
+            // Render data
+            renderJobs(mockJobs);
+            renderPayments(mockPayments);
+            renderHomeJobs(mockJobs.slice(0, 3));
+        }
+
+        function initMobileMenu() {
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                
+                if (mobileMenu.classList.contains('active') && 
+                    !mobileMenu.contains(event.target) && 
+                    !mobileMenuBtn.contains(event.target)) {
+                    toggleMobileMenu();
+                }
+            });
+
+            // Close mobile menu on escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu.classList.contains('active')) {
+                        toggleMobileMenu();
+                    }
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const isActive = mobileMenu.classList.contains('active');
+            
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = isActive ? '' : 'hidden';
+            
+            // Update menu button icon
+            const menuBtn = document.querySelector('.mobile-menu-btn i');
+            menuBtn.className = isActive ? 'fas fa-bars' : 'fas fa-times';
+        }
+
+        function setupEventListeners() {
+            // Keypad buttons
+            document.querySelectorAll('.keypad button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    handleKeypadInput(key);
+                });
+                
+                // Add touch feedback
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // Enter key for simulator
+            document.addEventListener('keydown', function(e) {
+                if (currentTab === 'simulator') {
+                    if (e.key >= '0' && e.key <= '9') {
+                        handleKeypadInput(e.key);
+                    } else if (e.key === '*') {
+                        handleKeypadInput('*');
+                    } else if (e.key === '#') {
+                        handleKeypadInput('#');
+                    } else if (e.key === 'Enter') {
+                        sendSimulatorInput();
+                    } else if (e.key === 'Backspace') {
+                        clearSimulatorInput();
+                    }
+                }
+            });
+
+            // Forms
+            document.getElementById('postJobForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                postJob();
+            });
+
+            document.getElementById('profileForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateProfile();
+            });
+        }
+
+        // Tab Navigation
+        let currentTab = 'home';
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const tab = document.getElementById(tabName + '-tab');
+            if (tab) {
+                tab.classList.add('active');
+                currentTab = tabName;
+                
+                // Update tab button
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Update nav menu
+                document.querySelectorAll('.nav-menu a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Load tab-specific data
+                switch(tabName) {
+                    case 'jobs':
+                        renderJobs();
+                        break;
+                    case 'admin':
+                        renderSystemLogs();
+                        break;
+                    case 'payments':
+                        renderPayments();
+                        break;
+                    case 'dashboard':
+                        updateDashboardStats();
+                        break;
+                }
+            }
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Jobs Functions
+        function renderJobs(jobsData) {
+            const container = document.getElementById('jobsGrid');
+            if (!container || !jobsData) return;
+
+            container.innerHTML = jobsData.map(job => `
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <h3 class="job-title">${job.title}</h3>
+                            <p class="job-company">${job.company}</p>
+                        </div>
+                        <span class="job-type">${job.type}</span>
+                    </div>
+                    
+                    <div class="job-details">
+                        <div class="job-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${job.location}</span>
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>${job.salary}</span>
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-tag"></i>
+                            <span>${job.category.charAt(0).toUpperCase() + job.category.slice(1)}</span>
+                        </div>
+                    </div>
+                    
+                    <p>${job.description}</p>
+                    
+                    <div class="job-footer">
+                        <div class="job-salary">${job.salary}</div>
+                        <button class="btn btn-primary" onclick="applyForJob(${job.id})">
+                            <i class="fas fa-paper-plane"></i> Apply Now
+                        </button>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 10px;">
+                        <i class="far fa-clock"></i> Posted ${job.posted}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function renderHomeJobs(jobsData) {
+            const container = document.getElementById('homeJobs');
+            if (!container || !jobsData) return;
+
+            container.innerHTML = jobsData.map(job => `
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <h3 class="job-title">${job.title}</h3>
+                            <p class="job-company">${job.company}</p>
+                        </div>
+                        <span class="job-type">${job.type}</span>
+                    </div>
+                    
+                    <div class="job-details">
+                        <div class="job-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${job.location}</span>
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>${job.salary}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="job-footer">
+                        <div class="job-salary">${job.salary}</div>
+                        <button class="btn btn-primary" onclick="applyForJob(${job.id})">
+                            <i class="fas fa-paper-plane"></i> Apply
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterJobs() {
+            // This would filter jobs based on search criteria
+            // For now, just show notification
+            showNotification('Filtering jobs...');
+        }
+
+        function loadMoreJobs() {
+            showNotification('Loading more jobs...');
+            // In real app, this would fetch more jobs from backend
+        }
+
+        function applyForJob(jobId) {
+            showNotification('Applying for job...');
+            // In real app, this would send application to backend
+        }
+
+        function postJob() {
+            const title = document.getElementById('jobTitle').value;
+            const salary = document.getElementById('jobSalary').value;
+            const type = document.getElementById('jobType').value;
+            const location = document.getElementById('jobLocationForm').value;
+            const category = document.getElementById('jobCategoryForm').value;
+            const description = document.getElementById('jobDescription').value;
+            const phone = document.getElementById('contactPhone').value;
+
+            // Validate
+            if (!title || !salary || !type || !location || !category || !description || !phone) {
+                showNotification('Please fill all required fields');
+                return;
+            }
+
+            showNotification('Posting job... Please complete payment of K10 via USSD.');
+            
+            // In real app, this would send to backend
+            setTimeout(() => {
+                showNotification('Job posted successfully!');
+                document.getElementById('postJobForm').reset();
+            }, 2000);
+        }
+
+        // Payments Functions
+        function renderPayments(paymentsData) {
+            const container = document.getElementById('paymentHistory');
+            if (!container || !paymentsData) return;
+
+            container.innerHTML = paymentsData.map(payment => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">${payment.date}</td>
+                    <td style="padding: 12px;">${payment.description}</td>
+                    <td style="padding: 12px; font-weight: 600;">${payment.amount}</td>
+                    <td style="padding: 12px;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; 
+                              background: ${payment.status === 'completed' ? '#d4edda' : payment.status === 'pending' ? '#fff3cd' : '#f8d7da'}; 
+                              color: ${payment.status === 'completed' ? '#155724' : payment.status === 'pending' ? '#856404' : '#721c24'}">
+                            ${payment.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function initiatePayment(type) {
+            let amount = "K10";
+            let purpose = "Premium Job Posting";
+            
+            switch(type) {
+                case 'mobile':
+                    amount = "K50";
+                    purpose = "Mobile Money Payment";
+                    break;
+                case 'withdrawal':
+                    amount = "K500";
+                    purpose = "Earnings Withdrawal";
+                    break;
+            }
+            
+            showNotification(`Initiating ${purpose} of ${amount}. Please complete payment via USSD.`);
+        }
+
+        // Dashboard Functions
+        function updateDashboardStats() {
+            // Update stats with random values for demo
+            document.getElementById('jobsApplied').textContent = Math.floor(Math.random() * 20) + 5;
+            document.getElementById('jobsAccepted').textContent = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('jobsPending').textContent = Math.floor(Math.random() * 8) + 1;
+            document.getElementById('totalEarningsUser').textContent = `K ${Math.floor(Math.random() * 1000) + 100}`;
+        }
+
+        function updateProfile() {
+            const name = document.getElementById('profileName').value;
+            const phone = document.getElementById('profilePhone').value;
+            const skills = document.getElementById('profileSkills').value;
+            
+            document.getElementById('userName').textContent = name.split(' ')[0];
+            showNotification('Profile updated successfully!');
+        }
+
+        function renderSystemLogs() {
+            // This would render system logs in admin panel
+        }
+
+        function adminAction(action) {
+            const messages = {
+                'refresh': 'Data refreshed successfully',
+                'backup': 'Database backup initiated',
+                'users': 'Opening user management',
+                'jobs': 'Opening job management',
+                'payments': 'Loading payment records',
+                'reports': 'Generating system reports'
+            };
+            
+            showNotification(messages[action] || 'Action completed');
+        }
+
+        // USSD Simulator Functions
+        let simulatorInput = '';
+        let simulatorMenuLevel = 'main';
+
+        function updateSimulatorTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            document.getElementById('simulatorTime').textContent = time;
+        }
+
+        function handleKeypadInput(key) {
+            const display = document.getElementById('simulatorDisplay');
+            const inputSpan = document.getElementById('currentInput');
+            
+            if (key === '*') {
+                // Back/clear
+                if (simulatorInput.length > 0) {
+                    simulatorInput = simulatorInput.slice(0, -1);
+                } else {
+                    simulatorMenuLevel = 'main';
+                    displaySimulatorMenu();
+                }
+            } else if (key === '#') {
+                // Send/enter
+                processSimulatorInput();
+            } else {
+                // Add number
+                simulatorInput += key;
+            }
+            
+            inputSpan.textContent = simulatorInput;
+            display.scrollTop = display.scrollHeight;
+        }
+
+        function clearSimulatorInput() {
+            simulatorInput = '';
+            document.getElementById('currentInput').textContent = '';
+        }
+
+        function sendSimulatorInput() {
+            processSimulatorInput();
+        }
+
+        function resetSimulator() {
+            simulatorInput = '';
+            simulatorMenuLevel = 'main';
+            document.getElementById('currentInput').textContent = '';
+            document.getElementById('sessionStatus').textContent = 'Active';
+            document.getElementById('menuLevel').textContent = 'Main Menu';
+            displaySimulatorMenu();
+        }
+
+        function displaySimulatorMenu() {
+            const display = document.getElementById('simulatorDisplay');
+            let menuHTML = '';
+            
+            switch(simulatorMenuLevel) {
+                case 'main':
+                    menuHTML = `
+                        <div class="ussd-message">Welcome to JOWA Zambia!</div>
+                        <div class="ussd-message">Connecting workers and employers across Zambia</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">1. Looking for Work</div>
+                        <div class="ussd-message">2. Post a Job</div>
+                        <div class="ussd-message">3. Payment Services</div>
+                        <div class="ussd-message">4. My Account</div>
+                        <div class="ussd-message">5. Help & Support</div>
+                    `;
+                    break;
+                    
+                case 'work':
+                    menuHTML = `
+                        <div class="ussd-message">Looking for Work</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">1. Browse Available Jobs</div>
+                        <div class="ussd-message">2. My Applications</div>
+                        <div class="ussd-message">3. Update Profile</div>
+                        <div class="ussd-message">4. Job Alerts</div>
+                        <div class="ussd-message">0. Back to Main Menu</div>
+                    `;
+                    break;
+                    
+                case 'employer':
+                    menuHTML = `
+                        <div class="ussd-message">Post a Job</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">1. Post New Job (K10)</div>
+                        <div class="ussd-message">2. View My Jobs</div>
+                        <div class="ussd-message">3. View Applications</div>
+                        <div class="ussd-message">4. Employer Profile</div>
+                        <div class="ussd-message">0. Back to Main Menu</div>
+                    `;
+                    break;
+                    
+                case 'payment':
+                    menuHTML = `
+                        <div class="ussd-message">Payment Services</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">1. Make Payment</div>
+                        <div class="ussd-message">2. Payment History</div>
+                        <div class="ussd-message">3. Withdraw Earnings</div>
+                        <div class="ussd-message">4. Payment Methods</div>
+                        <div class="ussd-message">0. Back to Main Menu</div>
+                    `;
+                    break;
+                    
+                case 'account':
+                    menuHTML = `
+                        <div class="ussd-message">My Account</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">Name: John Banda</div>
+                        <div class="ussd-message">Phone: +260971234567</div>
+                        <div class="ussd-message">Location: Lusaka</div>
+                        <div class="ussd-message">Balance: K 450</div>
+                        <div class="ussd-message"> </div>
+                        <div class="ussd-message">1. Update Profile</div>
+                        <div class="ussd-message">2. Change PIN</div>
+                        <div class="ussd-message">0. Back to Main Menu</div>
+                    `;
+                    break;
+            }
+            
+            display.innerHTML = menuHTML + `
+                <div class="input-line">
+                    <span class="input-prompt">&gt;</span>
+                    <span id="currentInput"></span>
+                    <span class="input-cursor">█</span>
+                </div>
+            `;
+            document.getElementById('menuLevel').textContent = simulatorMenuLevel.charAt(0).toUpperCase() + simulatorMenuLevel.slice(1) + ' Menu';
+            display.scrollTop = display.scrollHeight;
+        }
+
+        function processSimulatorInput() {
+            const display = document.getElementById('simulatorDisplay');
+            const input = simulatorInput;
+            simulatorInput = '';
+            document.getElementById('currentInput').textContent = '';
+            
+            let response = '';
+            
+            switch(simulatorMenuLevel) {
+                case 'main':
+                    if (input === '1') {
+                        simulatorMenuLevel = 'work';
+                        response = 'Loading job seeker menu...';
+                    } else if (input === '2') {
+                        simulatorMenuLevel = 'employer';
+                        response = 'Loading employer menu...';
+                    } else if (input === '3') {
+                        simulatorMenuLevel = 'payment';
+                        response = 'Loading payment services...';
+                    } else if (input === '4') {
+                        simulatorMenuLevel = 'account';
+                        response = 'Loading account information...';
+                    } else if (input === '5') {
+                        response = 'Support: Call +260570528201 or email support@jowa.co.zm';
+                    } else if (input === '*384*531#') {
+                        response = 'Welcome to JOWA Zambia! Main menu loading...';
+                    } else {
+                        response = 'Invalid selection. Please try again.';
+                    }
+                    break;
+                    
+                case 'work':
+                    if (input === '1') {
+                        response = 'Loading available jobs... Showing 5 jobs near you.';
+                    } else if (input === '2') {
+                        response = 'You have 3 pending applications.';
+                    } else if (input === '0') {
+                        simulatorMenuLevel = 'main';
+                        response = 'Returning to main menu...';
+                    } else {
+                        response = 'Invalid selection.';
+                    }
+                    break;
+                    
+                case 'employer':
+                    if (input === '1') {
+                        response = 'To post a job: 1. Enter job title 2. Enter description 3. Set price K10';
+                    } else if (input === '0') {
+                        simulatorMenuLevel = 'main';
+                        response = 'Returning to main menu...';
+                    } else {
+                        response = 'Invalid selection.';
+                    }
+                    break;
+                    
+                case 'payment':
+                    if (input === '1') {
+                        response = 'Select payment method: 1. MTN 2. Airtel 3. Zamtel';
+                    } else if (input === '0') {
+                        simulatorMenuLevel = 'main';
+                        response = 'Returning to main menu...';
+                    } else {
+                        response = 'Invalid selection.';
+                    }
+                    break;
+                    
+                case 'account':
+                    if (input === '0') {
+                        simulatorMenuLevel = 'main';
+                        response = 'Returning to main menu...';
+                    } else {
+                        response = 'Feature coming soon.';
+                    }
+                    break;
+            }
+            
+            // Add response to display
+            const responseElement = document.createElement('div');
+            responseElement.className = 'ussd-message';
+            responseElement.textContent = response;
+            display.insertBefore(responseElement, display.querySelector('.input-line'));
+            
+            // Update menu if level changed
+            if (response.includes('menu')) {
+                setTimeout(() => {
+                    displaySimulatorMenu();
+                }, 1000);
+            }
+            
+            display.scrollTop = display.scrollHeight;
+        }
+
+        // Utility Functions
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--zambia-green);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+            
+            // Add animation styles
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard: ' + text);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Add touch/click sound effects for better mobile experience
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
+</body>
+</html>
